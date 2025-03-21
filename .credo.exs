@@ -23,9 +23,7 @@
         #
         included: [
           "lib/",
-          "test/",
-          "apps/*/lib/",
-          "apps/*/test/"
+          "test/"
         ],
         excluded: [
           ~r"/_build/",
