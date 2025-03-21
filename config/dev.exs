@@ -2,8 +2,8 @@ import Config
 
 # Configure your database
 config :x_finances, XFinances.Repo,
-  username: "docker",
-  password: "docker",
+  username: "postgres",
+  password: "postgres",
   hostname: "localhost",
   database: "x_finances",
   stacktrace: true,
