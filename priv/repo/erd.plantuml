@@ -21,7 +21,7 @@ entity XFinances.Categories.Category {
 entity XFinances.Transactions.Transaction {
   id : id
   --
-  category_id : string
+  category_id : integer
   title : string
   movement : enum(outgoing,incoming)
   value_in_cents : integer

@@ -10,8 +10,8 @@ defmodule XFinances.Transactions.Transaction do
   @optional_params [:date, :due_date]
 
   @type t :: %__MODULE__{
-          id: Integer.t(),
-          category_id: String.t(),
+          id: integer(),
+          category_id: integer(),
           title: String.t(),
           movement: String.t(),
           value_in_cents: String.t(),
@@ -23,7 +23,6 @@ defmodule XFinances.Transactions.Transaction do
           updated_at: DateTime.t()
         }
   schema "transactions" do
-    field :category_id, :string
     field :title, :string
     field :movement, Ecto.Enum, values: @movement_types
     field :value_in_cents, :integer
@@ -32,7 +31,7 @@ defmodule XFinances.Transactions.Transaction do
     field :is_fixed, :boolean
     field :is_paid, :boolean
 
-    belongs_to :categories, Category
+    belongs_to :category, Category
 
     timestamps()
   end
