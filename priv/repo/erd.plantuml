@@ -1,0 +1,38 @@
+@startuml
+
+set namespaceSeparator none
+hide circle
+hide methods
+
+skinparam linetype ortho
+skinparam defaultFontName Roboto Mono
+skinparam shadowing false
+
+
+entity XFinances.Categories.Category {
+  id : id
+  --
+  title : string
+  description : string
+  inserted_at : naive_datetime
+  updated_at : naive_datetime
+}
+
+entity XFinances.Transactions.Transaction {
+  id : id
+  --
+  category_id : string
+  title : string
+  movement : enum(outgoing,incoming)
+  value_in_cents : integer
+  date : date
+  due_date : date
+  is_fixed : boolean
+  is_paid : boolean
+  categories_id : id
+  inserted_at : naive_datetime
+  updated_at : naive_datetime
+}
+
+XFinances.Categories.Category ||--|{ XFinances.Transactions.Transaction
+@enduml
