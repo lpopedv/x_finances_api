@@ -43,7 +43,8 @@ defmodule XFinances.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false}
+      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
+      {:ecto_erd, "~> 0.6", only: :dev, runtime: false}
     ]
   end
 
@@ -58,7 +59,23 @@ defmodule XFinances.MixProject do
       setup: ["deps.get", "ecto.setup"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      "ecto.migrate": ["ecto.migrate", &maybe_ecto_dump/1, &maybe_schema_dump/1],
+      "ecto.rollback": ["ecto.rollback", &maybe_ecto_dump/1, &maybe_schema_dump/1]
     ]
+  end
+
+  defp maybe_ecto_dump(_) do
+    if Mix.env() == :dev do
+      Mix.Task.run("ecto.dump")
+    end
+  end
+
+  defp maybe_schema_dump(_) do
+    if Mix.env() == :dev do
+      Mix.Task.run("ecto.gen.erd", ["--output-path=erd.puml"])
+      File.cp!("erd.puml", "priv/repo/erd.plantuml")
+      File.rm!("erd.puml")
+    end
   end
 end
