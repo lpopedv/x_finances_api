@@ -60,7 +60,13 @@ defmodule XFinancesWeb.DashboardControllerTest do
                "dashboard_data" => %{
                  "fixed_expenses" => 75_000,
                  "monthly_expenses" => 11_000,
-                 "next_month_expeses" => 5000
+                 "next_month_expeses" => 5000,
+                 "charts" => %{
+                   "spents_by_category" => [
+                     %{"category" => "Fixed expenses", "spent" => 75_000},
+                     %{"category" => "Food", "spent" => 11_000}
+                   ]
+                 }
                }
              } == response
     end
