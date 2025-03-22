@@ -13,6 +13,8 @@ defmodule XFinancesWeb.Router do
 
     resources "/transactions", TransactionsController,
       only: [:index, :create, :update, :delete, :show]
+
+    get "/dashboard_data", DashboardController, :get_dashboard_data
   end
 
   # Enable LiveDashboard in development
