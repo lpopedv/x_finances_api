@@ -37,6 +37,7 @@ defmodule XFinancesWeb.TransactionsJSON do
   defp transaction_to_map(%Transaction{} = transaction) do
     %{
       id: transaction.id,
+      category_id: transaction.category_id,
       title: transaction.title,
       movement: transaction.movement,
       value_in_cents: transaction.value_in_cents,
