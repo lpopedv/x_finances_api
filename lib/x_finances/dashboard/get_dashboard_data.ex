@@ -41,7 +41,10 @@ defmodule XFinances.Dashboard.GetDashboardData do
     Transaction
     |> where([t], t.movement == :outgoing)
     |> where([t], not t.is_fixed)
-    |> where([t], t.due_date >= ^next_month_start and t.due_date <= ^next_month_end)
+    |> where(
+      [t],
+      t.due_date >= ^next_month_start and t.due_date <= ^next_month_end and t.is_paid == false
+    )
     |> select([t], sum(t.value_in_cents))
     |> Repo.one() || 0
   end
