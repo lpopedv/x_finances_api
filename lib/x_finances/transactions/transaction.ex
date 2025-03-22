@@ -40,5 +40,6 @@ defmodule XFinances.Transactions.Transaction do
     schema
     |> cast(params, @optional_params ++ @required_params)
     |> validate_required(@required_params)
+    |> foreign_key_constraint(:category_id, message: "Category does not exist")
   end
 end
