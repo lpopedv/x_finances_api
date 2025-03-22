@@ -44,7 +44,8 @@ defmodule XFinances.MixProject do
       {:bandit, "~> 1.5"},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ecto_erd, "~> 0.6", only: :dev, runtime: false}
+      {:ecto_erd, "~> 0.6", only: :dev, runtime: false},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
