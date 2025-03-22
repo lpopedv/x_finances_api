@@ -32,8 +32,8 @@ defmodule XFinancesWeb.TransactionsControllerTest do
       assert %{
                "message" => "Transação criada com sucesso",
                "new_transaction" => %{
-                 "date" => "2025-03-21",
-                 "due_date" => "2025-03-21",
+                 "date" => date,
+                 "due_date" => due_date,
                  "id" => _id,
                  "is_fixed" => true,
                  "is_paid" => false,
@@ -42,6 +42,11 @@ defmodule XFinancesWeb.TransactionsControllerTest do
                  "value_in_cents" => 15_000
                }
              } = response
+
+      today_date = Date.utc_today()
+
+      assert Date.from_iso8601!(date) == today_date
+      assert Date.from_iso8601!(due_date) == today_date
     end
   end
 
@@ -94,8 +99,8 @@ defmodule XFinancesWeb.TransactionsControllerTest do
       assert %{
                "message" => "Transação atualizada com sucesso",
                "updated_transaction" => %{
-                 "date" => "2025-03-21",
-                 "due_date" => "2025-03-21",
+                 "date" => date,
+                 "due_date" => due_date,
                  "id" => _id,
                  "is_fixed" => true,
                  "is_paid" => false,
@@ -104,6 +109,11 @@ defmodule XFinancesWeb.TransactionsControllerTest do
                  "value_in_cents" => 1000
                }
              } = response
+
+      today_date = Date.utc_today()
+
+      assert Date.from_iso8601!(date) == today_date
+      assert Date.from_iso8601!(due_date) == today_date
     end
   end
 
