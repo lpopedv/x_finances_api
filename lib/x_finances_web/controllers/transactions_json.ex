@@ -38,6 +38,10 @@ defmodule XFinancesWeb.TransactionsJSON do
     %{
       id: transaction.id,
       category_id: transaction.category_id,
+      category: %{
+        id: transaction.category.id,
+        title: transaction.category.title
+      },
       title: transaction.title,
       movement: transaction.movement,
       value_in_cents: transaction.value_in_cents,
