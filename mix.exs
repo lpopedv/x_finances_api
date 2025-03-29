@@ -45,7 +45,8 @@ defmodule XFinances.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
       {:ecto_erd, "~> 0.6", only: :dev, runtime: false},
-      {:cors_plug, "~> 3.0"}
+      {:cors_plug, "~> 3.0"},
+      {:argon2_elixir, "~> 4.0"}
     ]
   end
 
