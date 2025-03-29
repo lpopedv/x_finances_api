@@ -3,15 +3,25 @@ defmodule XFinances.Transactions.Transaction do
   import Ecto.Changeset
 
   alias XFinances.Categories.Category
+  alias XFinances.Users.User
 
   @movement_types [:incoming, :outgoing]
 
-  @required_params [:category_id, :title, :movement, :value_in_cents, :is_fixed, :is_paid]
+  @required_params [
+    :category_id,
+    :user_id,
+    :title,
+    :movement,
+    :value_in_cents,
+    :is_fixed,
+    :is_paid
+  ]
   @optional_params [:date, :due_date]
 
   @type t :: %__MODULE__{
           id: integer(),
           category_id: integer(),
+          user_id: integer(),
           title: String.t(),
           movement: String.t(),
           value_in_cents: String.t(),
@@ -31,6 +41,7 @@ defmodule XFinances.Transactions.Transaction do
     field :is_fixed, :boolean
     field :is_paid, :boolean
 
+    belongs_to :user, User
     belongs_to :category, Category
 
     timestamps()
@@ -40,6 +51,7 @@ defmodule XFinances.Transactions.Transaction do
     schema
     |> cast(params, @optional_params ++ @required_params)
     |> validate_required(@required_params)
-    |> foreign_key_constraint(:category_id, message: "Category does not exist")
+    |> assoc_constraint(:user)
+    |> assoc_constraint(:category)
   end
 end

@@ -14,6 +14,7 @@ entity XFinances.Categories.Category {
   --
   title : string
   description : string
+  user_id : id
   inserted_at : naive_datetime
   updated_at : naive_datetime
 }
@@ -28,6 +29,7 @@ entity XFinances.Transactions.Transaction {
   due_date : date
   is_fixed : boolean
   is_paid : boolean
+  user_id : id
   category_id : id
   inserted_at : naive_datetime
   updated_at : naive_datetime
