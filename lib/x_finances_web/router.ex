@@ -1,12 +1,24 @@
 defmodule XFinancesWeb.Router do
   use XFinancesWeb, :router
 
+  alias XFinancesWeb.Plugs.Auth
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug Auth
+  end
+
   scope "/api", XFinancesWeb do
     pipe_through :api
+
+    post "/authenticate", AuthController, :authenticate
+  end
+
+  scope "/api", XFinancesWeb do
+    pipe_through [:api, :auth]
 
     resources "/categories", CategoriesController,
       only: [:index, :create, :update, :delete, :show]
