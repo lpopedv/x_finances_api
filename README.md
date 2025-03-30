@@ -24,13 +24,39 @@ The API provides endpoints for managing finances. It currently supports:
 ### Installation (API)
 
 1. Clone the repository:
+
+```
    git clone <https://github.com/lpopedv/x_finances_api.git>
+
+```
+
+```
    cd x_finances_api
+
+```
+
 2. Install dependencies:
+
+   ```
    mix deps.get
-2. up postgres docker container:
+   ```
+
+2. up postgresql docker container:
+
+   ```
    docker compose up -d
+   ```
+
 3. Set up the database:
+
+```
    mix ecto.setup
+
+```
+
 4. Start the API server:
+
+```
    mix phx.server
+
+```
