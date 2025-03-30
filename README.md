@@ -1,58 +1,59 @@
-# XFinances
+# XFinances API 🚀
 
-XFinances is an open-source financial control system built with Elixir, featuring both an API and a dedicated frontend interface.
+**⚠️ Note: This project is currently under active development.**
+
+XFinances is an open-source financial control system built with Elixir. This repository contains the API component of the system, which provides endpoints for managing your finances. 💰
 
 ---
 
-## API
+## Overview
 
-### Overview
+The API offers endpoints for:
 
-The API provides endpoints for managing finances. It currently supports:
+- **Users**: Perform CRUD operations for user management. 👤
+- **Categories**: Manage your financial categories. 🗂️
+- **Transactions**: Record and track your financial transactions. 💸
 
-- CRUD operations for Users
-- CRUD operations for Categories
-- CRUD operations for Transactions
+---
 
-### Future Enhancements
+## Future Enhancements
 
-- Comprehensive financial reports
-- Integration with cryptocurrency monitoring systems
-- Trading bot for automated trading strategies
-- Payment reminders and notifications
+- Comprehensive financial reports 📊  
+- Integration with cryptocurrency monitoring systems 🔗  
+- Automated trading bot for executing trading strategies 🤖  
+- Payment reminders and notifications ⏰  
 
-### Installation (API)
+---
 
-1. Clone the repository:
+## Installation
 
-```
-   git clone <https://github.com/lpopedv/x_finances_api.git>
-```
+1. **Clone the repository:**
 
-```
+   ```bash
+   git clone https://github.com/lpopedv/x_finances_api.git
    cd x_finances_api
-```
-
-2. Install dependencies:
-
-   ```
-   mix deps.get
    ```
 
-2. up postgresql docker container:
+2. **Install dependencies:**
 
-   ```
-   docker compose up -d
-   ```
-
-3. Set up the database:
-
-```
-   mix ecto.setup
+```bash
+mix deps.get
 ```
 
-4. Start the API server:
+3. **Start the PostgreSQL Docker container:**
 
+```bash
+docker compose up -d
 ```
-   mix phx.server
+
+4. **Set up the database:**
+
+```bash
+mix ecto.setup
+```
+
+5. Start the API server:
+
+```bash
+mix phx.server
 ```
