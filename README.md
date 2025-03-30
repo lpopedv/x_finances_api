@@ -27,12 +27,10 @@ The API provides endpoints for managing finances. It currently supports:
 
 ```
    git clone <https://github.com/lpopedv/x_finances_api.git>
-
 ```
 
 ```
    cd x_finances_api
-
 ```
 
 2. Install dependencies:
@@ -51,12 +49,10 @@ The API provides endpoints for managing finances. It currently supports:
 
 ```
    mix ecto.setup
-
 ```
 
 4. Start the API server:
 
 ```
    mix phx.server
-
 ```
