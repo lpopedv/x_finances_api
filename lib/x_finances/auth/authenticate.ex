@@ -20,13 +20,6 @@ defmodule XFinances.Auth.Authenticate do
   ## Returns
     * `{:ok, user}` - If credentials are valid
     * `{:error, :invalid_credentials}` - If email doesn't exist or password is incorrect
-
-  ## Examples
-      iex> Authenticate.call(%{"email" => "user@example.com", "password" => "secret123"})
-      {:ok, %User{}}
-
-      iex> Authenticate.call(%{"email" => "wrong@email.com", "password" => "wrong"})
-      {:error, :invalid_credentials}
   """
   @spec call(map()) :: {:ok, User.t()} | {:error, :invalid_credentials}
   def call(%{"email" => email, "password" => password}) do

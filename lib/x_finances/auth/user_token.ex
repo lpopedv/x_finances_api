@@ -22,10 +22,6 @@ defmodule XFinances.Auth.UserToken do
 
   ## Returns
     A signed token string
-
-  ## Examples
-      iex> Token.sign(%{user_id: 1, roles: [:admin]})
-      "aGVsbG8gd29ybGQ..."
   """
   @spec sign(map()) :: String.t()
   def sign(token_data), do: Token.sign(Endpoint, @token_salt, token_data)
@@ -39,13 +35,6 @@ defmodule XFinances.Auth.UserToken do
   ## Returns
     - `{:ok, claims}` - If the token is valid and hasn't expired
     - `{:error, reason}` - If the token is invalid or expired
-
-  ## Examples
-      iex> Token.verify("aGVsbG8gd29ybGQ...")
-      {:ok, %{user_id: 1, roles: [:admin]}}
-
-      iex> Token.verify("invalid_token")
-      {:error, :invalid}
   """
   @spec verify(binary()) :: {:error, :expired | :invalid | :missing} | {:ok, map()}
   def verify(token), do: Token.verify(Endpoint, @token_salt, token, max_age: 86_400)
