@@ -1,4 +1,4 @@
-defmodule XFinances.Categories.Category do
+defmodule XFinances.Schemas.Category do
   @moduledoc """
   Category entity for organizing financial transactions.
 
@@ -64,4 +64,3 @@ defmodule XFinances.Categories.Category do
     |> assoc_constraint(:user)
   end
 end
-

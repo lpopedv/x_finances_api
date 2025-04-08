@@ -1,5 +1,5 @@
 defmodule XFinancesWeb.CategoriesJSON do
-  alias XFinances.Categories.Category
+  alias XFinances.Schemas.Category
 
   def index(%{categories: categories}) do
     %{

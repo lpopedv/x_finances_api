@@ -1,7 +1,7 @@
 defmodule XFinances.Dashboard.GetDashboardData do
   import Ecto.Query
 
-  alias XFinances.Categories.Category
+  alias XFinances.Schemas.Category
   alias XFinances.Repo
   alias XFinances.Transactions.Transaction
 

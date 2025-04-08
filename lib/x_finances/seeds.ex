@@ -1,8 +1,8 @@
 defmodule XFinances.Seeds do
   alias XFinances.Transactions.Transaction
-  alias XFinances.Categories.Category
   alias XFinances.Users.User
   alias XFinances.Repo
+  alias XFinances.Schemas.Category
 
   def run do
     create_users()

@@ -2,7 +2,7 @@ defmodule XFinancesWeb.CategoriesController do
   use XFinancesWeb, :controller
 
   alias XFinances.Categories
-  alias XFinances.Categories.Category
+  alias XFinances.Schemas.Category
   alias XFinancesWeb.FallbackController
 
   action_fallback FallbackController
