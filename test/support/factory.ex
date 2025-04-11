@@ -23,7 +23,7 @@ defmodule XFinances.Factory do
   end
 
   def transaction_factory do
-    %XFinances.Transactions.Transaction{
+    %XFinances.Schemas.Transaction{
       user: build(:user),
       category: insert(:category),
       title: "Transaction 01",

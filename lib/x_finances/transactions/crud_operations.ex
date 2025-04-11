@@ -6,6 +6,10 @@ defmodule XFinances.Transactions.CrudOperations do
     new_transaction_params
     |> Transaction.changeset()
     |> Repo.insert()
+    |> case do
+      {:ok, transaction} -> {:ok, Repo.preload(transaction, :category)}
+      error -> error
+    end
   end
 
   def update(transaction_id, new_transaction_params) do
@@ -17,22 +21,37 @@ defmodule XFinances.Transactions.CrudOperations do
         transaction
         |> Transaction.changeset(new_transaction_params)
         |> Repo.update()
+        |> case do
+          {:ok, transaction} -> {:ok, Repo.preload(transaction, :category)}
+          error -> error
+        end
     end
   end
 
   def delete(id) do
     case Repo.get(Transaction, id) do
-      nil -> {:error, :not_found}
-      transaction -> Repo.delete(transaction)
+      nil ->
+        {:error, :not_found}
+
+      transaction ->
+        transaction_with_category = Repo.preload(transaction, :category)
+
+        case Repo.delete(transaction_with_category) do
+          {:ok, deleted_transaction} ->
+            {:ok, deleted_transaction}
+
+          error ->
+            error
+        end
     end
   end
 
-  def list, do: Repo.all(Transaction)
+  def list, do: Transaction |> Repo.all() |> Repo.preload(:category)
 
   def show(id) do
     case Repo.get(Transaction, id) do
       nil -> {:error, :not_found}
-      transaction -> Repo.delete(transaction)
+      transaction -> {:ok, Repo.preload(transaction, :category)}
     end
   end
 end

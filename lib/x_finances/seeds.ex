@@ -1,5 +1,5 @@
 defmodule XFinances.Seeds do
-  alias XFinances.Transactions.Transaction
+  alias XFinances.Schemas.Transaction
   alias XFinances.Users.User
   alias XFinances.Repo
   alias XFinances.Schemas.Category

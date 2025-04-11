@@ -1,19 +1,26 @@
 defmodule XFinancesWeb.TransactionsControllerTest do
   use XFinancesWeb.ConnCase, async: true
 
+  import XFinances.Factory
+
+  setup %{conn: conn} do
+    user = insert(:user)
+    token = XFinances.GenAuthToken.call(user)
+    conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+    category = insert(:category)
+
+    %{conn: conn, category_id: category.id, user_id: user.id}
+  end
+
   describe "create/2" do
-    setup %{conn: conn} do
-      {:ok, %{id: category_id}} =
-        XFinances.Categories.create(%{
-          title: "Fixed Expenses",
-          description: "Expenses related to fixed transactions"
-        })
-
-      %{conn: conn, category_id: category_id}
-    end
-
-    test "should be able to create a new transaction", %{conn: conn, category_id: category_id} do
+    test "should be able to create a new transaction", %{
+      conn: conn,
+      category_id: category_id,
+      user_id: user_id
+    } do
       params = %{
+        user_id: user_id,
         category_id: category_id,
         title: "gym",
         movement: "outgoing",
@@ -51,15 +58,10 @@ defmodule XFinancesWeb.TransactionsControllerTest do
   end
 
   describe "update/2" do
-    setup %{conn: conn} do
-      {:ok, %{id: category_id}} =
-        XFinances.Categories.create(%{
-          title: "Fixed Expenses",
-          description: "Expenses related to fixed transactions"
-        })
-
+    setup %{conn: conn, category_id: category_id, user_id: user_id} do
       {:ok, transaction} =
         XFinances.Transactions.create(%{
+          user_id: user_id,
           category_id: category_id,
           title: "gym",
           movement: "outgoing",
@@ -70,17 +72,24 @@ defmodule XFinancesWeb.TransactionsControllerTest do
           is_paid: false
         })
 
-      %{conn: conn, transaction: transaction}
-    end
-
-    test "should be able to update transaction", %{conn: conn, transaction: transaction} do
       {:ok, %{id: other_category_id}} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Other Category",
           description: "Expenses related to Other Category"
         })
 
+      %{conn: conn, transaction: transaction, other_category_id: other_category_id}
+    end
+
+    test "should be able to update transaction", %{
+      conn: conn,
+      transaction: transaction,
+      user_id: user_id,
+      other_category_id: other_category_id
+    } do
       update_params = %{
+        user_id: user_id,
         category_id: other_category_id,
         title: "gym updated",
         movement: "outgoing",
@@ -118,15 +127,10 @@ defmodule XFinancesWeb.TransactionsControllerTest do
   end
 
   describe "index/2" do
-    setup %{conn: conn} do
-      {:ok, %{id: category_id}} =
-        XFinances.Categories.create(%{
-          title: "Fixed Expenses",
-          description: "Expenses related to fixed transactions"
-        })
-
+    setup %{conn: conn, category_id: category_id, user_id: user_id} do
       {:ok, transaction01} =
         XFinances.Transactions.create(%{
+          user_id: user_id,
           category_id: category_id,
           title: "gym",
           movement: "outgoing",
@@ -139,6 +143,7 @@ defmodule XFinancesWeb.TransactionsControllerTest do
 
       {:ok, transaction02} =
         XFinances.Transactions.create(%{
+          user_id: user_id,
           category_id: category_id,
           title: "other category",
           movement: "outgoing",
@@ -199,19 +204,14 @@ defmodule XFinancesWeb.TransactionsControllerTest do
   end
 
   describe "show/2" do
-    setup %{conn: conn} do
-      {:ok, %{id: category_id}} =
-        XFinances.Categories.create(%{
-          title: "Category",
-          description: "Description"
-        })
-
+    setup %{conn: conn, user_id: user_id, category_id: category_id} do
       {:ok, transaction} =
         XFinances.Transactions.create(%{
+          user_id: user_id,
           category_id: category_id,
           title: "gym",
           movement: "outgoing",
-          value_in_cents: 15_000,
+          value_in_cents: 15000,
           date: Date.utc_today(),
           due_date: Date.utc_today(),
           is_fixed: true,
@@ -251,15 +251,10 @@ defmodule XFinancesWeb.TransactionsControllerTest do
   end
 
   describe "delete/2" do
-    setup %{conn: conn} do
-      {:ok, %{id: category_id}} =
-        XFinances.Categories.create(%{
-          title: "Category",
-          description: "Description"
-        })
-
+    setup %{conn: conn, category_id: category_id, user_id: user_id} do
       {:ok, %{id: transaction_id}} =
         XFinances.Transactions.create(%{
+          user_id: user_id,
           category_id: category_id,
           title: "gym",
           movement: "outgoing",

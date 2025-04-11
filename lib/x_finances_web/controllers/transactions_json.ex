@@ -1,5 +1,5 @@
 defmodule XFinancesWeb.TransactionsJSON do
-  alias XFinances.Transactions.Transaction
+  alias XFinances.Schemas.Transaction
 
   def index(%{transactions: transactions}) do
     %{
