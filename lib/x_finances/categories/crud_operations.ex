@@ -3,8 +3,6 @@ defmodule XFinances.Categories.CrudOperations do
   alias XFinances.Schemas.Category
 
   def create(new_category_params) do
-    IO.inspect(new_category_params)
-
     new_category_params
     |> Category.changeset()
     |> Repo.insert()
