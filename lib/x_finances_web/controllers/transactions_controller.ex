@@ -2,7 +2,7 @@ defmodule XFinancesWeb.TransactionsController do
   use XFinancesWeb, :controller
 
   alias XFinances.Transactions
-  alias XFinances.Transactions.Transaction
+  alias XFinances.Schemas.Transaction
   alias XFinancesWeb.FallbackController
 
   action_fallback FallbackController
@@ -24,7 +24,7 @@ defmodule XFinancesWeb.TransactionsController do
   end
 
   def update(conn, params) do
-    with {:ok, %Transaction{} = transaction} <- Transactions.update(params) do
+    with {:ok, %Transaction{} = transaction} <- Transactions.update(params["id"], params) do
       conn
       |> put_status(:ok)
       |> render(:update, transaction: transaction)
