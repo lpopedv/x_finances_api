@@ -52,7 +52,13 @@ docker compose up -d
 mix ecto.setup
 ```
 
-5. Start the API server:
+5. Run tests:
+
+```bash
+mix test
+```
+
+6. Start the API server:
 
 ```bash
 mix phx.server
