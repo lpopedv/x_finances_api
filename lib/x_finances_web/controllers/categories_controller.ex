@@ -24,7 +24,7 @@ defmodule XFinancesWeb.CategoriesController do
   end
 
   def update(conn, params) do
-    with {:ok, %Category{} = category} <- Categories.update(params) do
+    with {:ok, %Category{} = category} <- Categories.update(params["id"], params) do
       conn
       |> put_status(:ok)
       |> render(:update, category: category)

@@ -10,7 +10,7 @@ defmodule XFinances.Transactions.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias XFinances.Categories.Category
+  alias XFinances.Schemas.Category
   alias XFinances.Users.User
 
   @movement_types [:incoming, :outgoing]
@@ -133,4 +133,3 @@ defmodule XFinances.Transactions.Transaction do
     end
   end
 end
-

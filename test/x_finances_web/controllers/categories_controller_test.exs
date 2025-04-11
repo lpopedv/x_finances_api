@@ -1,9 +1,19 @@
 defmodule XFinancesWeb.CategoriesControllerTest do
   use XFinancesWeb.ConnCase, async: true
 
+  import XFinances.Factory
+
+  setup %{conn: conn} do
+    user = insert(:user)
+    token = XFinances.GenAuthToken.call(user)
+    conn = put_req_header(conn, "authorization", "Bearer #{token}")
+    {:ok, conn: conn, user: user, user_id: user.id}
+  end
+
   describe "create/2" do
-    test "should be able to create a new category", %{conn: conn} do
+    test "should be able to create a new category", %{conn: conn, user_id: user_id} do
       params = %{
+        user_id: user_id,
         title: "Test category 01",
         description: "Teste category 01 description"
       }
@@ -25,18 +35,20 @@ defmodule XFinancesWeb.CategoriesControllerTest do
   end
 
   describe "update/2" do
-    setup %{conn: conn} do
+    setup %{user_id: user_id} do
       {:ok, category} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Initial Category",
           description: "Initial description"
         })
 
-      %{conn: conn, category: category}
+      {:ok, category: category}
     end
 
     test "should be able to update category", %{conn: conn, category: category} do
       update_params = %{
+        user_id: category.user_id,
         title: "Updated Category",
         description: "Updated Description"
       }
@@ -46,13 +58,10 @@ defmodule XFinancesWeb.CategoriesControllerTest do
         |> put(~p"/api/categories/#{category.id}", update_params)
         |> json_response(:ok)
 
-      category_id = category.id
-
       assert %{
                "message" => "Categoria atualizada com sucesso",
                "updated_category" => %{
                  "description" => "Updated Description",
-                 "id" => ^category_id,
                  "title" => "Updated Category"
                }
              } = response
@@ -60,26 +69,25 @@ defmodule XFinancesWeb.CategoriesControllerTest do
   end
 
   describe "index/2" do
-    setup %{conn: conn} do
-      {:ok, category01} =
+    setup %{user_id: user_id} do
+      {:ok, cat1} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Category 01",
           description: "Category 01 Description"
         })
 
-      {:ok, category02} =
+      {:ok, cat2} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Category 02",
           description: "Category 02 Description"
         })
 
-      %{conn: conn, categories: [category01, category02]}
+      {:ok, categories: [cat1, cat2]}
     end
 
-    test "should be able to list all categories", %{
-      conn: conn,
-      categories: [category01, category02]
-    } do
+    test "should be able to list all categories", %{conn: conn, categories: [cat1, cat2]} do
       response =
         conn
         |> get(~p"/api/categories")
@@ -100,20 +108,21 @@ defmodule XFinancesWeb.CategoriesControllerTest do
                ]
              } = response
 
-      assert id1 == category01.id
-      assert id2 == category02.id
+      assert id1 == cat1.id
+      assert id2 == cat2.id
     end
   end
 
   describe "show/2" do
-    setup %{conn: conn} do
+    setup %{user_id: user_id} do
       {:ok, category} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Category",
           description: "Description"
         })
 
-      %{conn: conn, category: category}
+      {:ok, category: category}
     end
 
     test "should be able to get category by id", %{conn: conn, category: category} do
@@ -125,25 +134,25 @@ defmodule XFinancesWeb.CategoriesControllerTest do
       assert %{
                "category" => %{
                  "description" => "Description",
-                 "id" => category_id,
+                 "id" => id,
                  "title" => "Category"
                }
-             } =
-               response
+             } = response
 
-      assert category_id == category.id
+      assert id == category.id
     end
   end
 
   describe "delete/2" do
-    setup %{conn: conn} do
+    setup %{user_id: user_id} do
       {:ok, category} =
         XFinances.Categories.create(%{
+          user_id: user_id,
           title: "Category",
           description: "Description"
         })
 
-      %{conn: conn, category: category}
+      {:ok, category: category}
     end
 
     test "should be able to delete category", %{conn: conn, category: category} do
@@ -155,14 +164,10 @@ defmodule XFinancesWeb.CategoriesControllerTest do
       assert %{
                "deleted_category" => %{
                  "description" => "Description",
-                 "id" => category_id,
                  "title" => "Category"
                },
                "message" => "Categoria deletada com sucesso"
-             } =
-               response
-
-      assert category_id == category.id
+             } = response
     end
   end
 end
