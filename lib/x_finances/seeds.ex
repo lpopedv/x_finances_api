@@ -14,7 +14,7 @@ defmodule XFinances.Seeds do
     %{
       "full_name" => "Jon Doe",
       "email" => "jon@doe.com",
-      "password" => "12345678",
+      "password" => "A123456789101112",
       "is_active" => true,
       "base_income" => 1000
     }
