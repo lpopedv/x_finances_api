@@ -3,7 +3,7 @@ defmodule XFinancesWeb.AuthController do
 
   alias XFinances.Auth.UserToken
   alias XFinances.Users
-  alias XFinances.Users.User
+  alias XFinances.Schemas.User
 
   def authenticate(conn, %{"email" => email, "password" => password}) do
     case Users.authenticate(%{"email" => email, "password" => password}) do

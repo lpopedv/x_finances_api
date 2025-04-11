@@ -1,15 +1,12 @@
 defmodule XFinances.Users do
   alias XFinances.Auth.Authenticate
-  alias XFinances.Users.Create
-  alias XFinances.Users.Delete
-  alias XFinances.Users.Get
-  alias XFinances.Users.Update
+  alias XFinances.Users.CrudOperations
 
   defdelegate authenticate(email), to: Authenticate, as: :call
-  defdelegate create(params), to: Create, as: :call
-  defdelegate delete(id), to: Delete, as: :call
-  defdelegate get_all(), to: Get, as: :all
-  defdelegate get_by_id(id), to: Get, as: :by_id
-  defdelegate get_by_email(email), to: Get, as: :by_email
-  defdelegate update(params), to: Update, as: :call
+  defdelegate create(params), to: CrudOperations
+  defdelegate delete(id), to: CrudOperations
+  defdelegate list(), to: CrudOperations
+  defdelegate show(id), to: CrudOperations
+  defdelegate get_by_email(email), to: CrudOperations
+  defdelegate update(user_id, params), to: CrudOperations
 end

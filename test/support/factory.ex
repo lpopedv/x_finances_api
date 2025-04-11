@@ -4,7 +4,7 @@ defmodule XFinances.Factory do
   def user_factory do
     password = "ValidPassword123!"
 
-    %XFinances.Users.User{
+    %XFinances.Schemas.User{
       full_name: "User Name",
       email: sequence(:email, &"user#{&1}@email.com"),
       password: password,

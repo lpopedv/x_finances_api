@@ -3,31 +3,33 @@ defmodule XFinances.Dashboard.GetDashboardData do
 
   alias XFinances.Schemas.Category
   alias XFinances.Repo
-  alias XFinances.Transactions.Transaction
+  alias XFinances.Schemas.Transaction
 
-  def call do
+  def call(user_id) do
     %{
-      fixed_expenses: get_data(:fixed_expenses),
-      monthly_expenses: get_data(:monthly_expenses),
-      next_month_expeses: get_data(:next_month_expenses),
+      fixed_expenses: get_data(:fixed_expenses, user_id),
+      monthly_expenses: get_data(:monthly_expenses, user_id),
+      next_month_expenses: get_data(:next_month_expenses, user_id),
       charts: %{
-        spents_by_category: get_chart(:spents_by_category)
+        spents_by_category: get_chart(:spents_by_category, user_id)
       }
     }
   end
 
-  defp get_data(:fixed_expenses) do
+  defp get_data(:fixed_expenses, user_id) do
     Transaction
+    |> where([t], t.user_id == ^user_id)
     |> where([t], t.is_fixed == true)
     |> where([t], t.movement == :outgoing)
     |> select([t], sum(t.value_in_cents))
     |> Repo.one() || 0
   end
 
-  defp get_data(:monthly_expenses) do
+  defp get_data(:monthly_expenses, user_id) do
     {start_date, end_date} = current_month_bounds()
 
     Transaction
+    |> where([t], t.user_id == ^user_id)
     |> where([t], t.movement == :outgoing)
     |> where([t], not t.is_fixed)
     |> where([t], t.date >= ^start_date and t.date <= ^end_date)
@@ -35,10 +37,11 @@ defmodule XFinances.Dashboard.GetDashboardData do
     |> Repo.one() || 0
   end
 
-  defp get_data(:next_month_expenses) do
+  defp get_data(:next_month_expenses, user_id) do
     {next_month_start, next_month_end} = next_month_bounds()
 
     Transaction
+    |> where([t], t.user_id == ^user_id)
     |> where([t], t.movement == :outgoing)
     |> where([t], not t.is_fixed)
     |> where(
@@ -49,13 +52,14 @@ defmodule XFinances.Dashboard.GetDashboardData do
     |> Repo.one() || 0
   end
 
-  defp get_chart(:spents_by_category) do
+  defp get_chart(:spents_by_category, user_id) do
     {start_date, end_date} = current_month_bounds()
 
     transactions_query =
       from t in Transaction,
         where:
-          t.movement == :outgoing and
+          t.user_id == ^user_id and
+            t.movement == :outgoing and
             ((t.date >= ^start_date and t.date <= ^end_date) or t.is_fixed == true),
         group_by: t.category_id,
         order_by: [desc: sum(t.value_in_cents)],

@@ -9,7 +9,7 @@ defmodule XFinancesWeb.DashboardJSON do
     %{
       fixed_expenses: dashboard_data.fixed_expenses,
       monthly_expenses: dashboard_data.monthly_expenses,
-      next_month_expeses: dashboard_data.next_month_expeses,
+      next_month_expenses: dashboard_data.next_month_expenses,
       charts: %{
         spents_by_category: dashboard_data.charts.spents_by_category
       }

@@ -1,4 +1,4 @@
-defmodule XFinances.Users.User do
+defmodule XFinances.Schemas.User do
   @moduledoc """
   User entity responsible for authentication and account management.
 

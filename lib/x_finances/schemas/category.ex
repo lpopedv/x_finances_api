@@ -9,7 +9,7 @@ defmodule XFinances.Schemas.Category do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias XFinances.Users.User
+  alias XFinances.Schemas.User
 
   @required_params [:user_id, :title]
   @optional_params [:description]

@@ -7,7 +7,7 @@ defmodule XFinances.Auth.Authenticate do
   """
 
   alias XFinances.Users
-  alias XFinances.Users.User
+  alias XFinances.Schemas.User
 
   @doc """
   Authenticates a user with the given credentials.

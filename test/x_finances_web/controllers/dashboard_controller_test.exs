@@ -1,12 +1,25 @@
 defmodule XFinancesWeb.DashboardControllerTest do
   use XFinancesWeb.ConnCase, async: true
 
+  import XFinances.Factory
+
   describe "get_dashboard_data/1" do
     setup %{conn: conn} do
-      {:ok, %{id: category_id_01}} = XFinances.Categories.create(%{title: "Fixed expenses"})
-      {:ok, %{id: category_id_02}} = XFinances.Categories.create(%{title: "Food"})
+      user = insert(:user)
+      token = XFinances.GenAuthToken.call(user)
+      conn = put_req_header(conn, "authorization", "Bearer #{token}")
+
+      today = Date.utc_today()
+      {next_month_start, _} = XFinances.TestHelpers.next_month_bounds()
+
+      {:ok, %{id: category_id_01}} =
+        XFinances.Categories.create(%{user_id: user.id, title: "Fixed expenses"})
+
+      {:ok, %{id: category_id_02}} =
+        XFinances.Categories.create(%{user_id: user.id, title: "Food"})
 
       XFinances.Transactions.create(%{
+        user_id: user.id,
         category_id: category_id_01,
         title: "gym",
         movement: "outgoing",
@@ -16,6 +29,7 @@ defmodule XFinancesWeb.DashboardControllerTest do
       })
 
       XFinances.Transactions.create(%{
+        user_id: user.id,
         category_id: category_id_01,
         title: "rent",
         movement: "outgoing",
@@ -25,23 +39,34 @@ defmodule XFinancesWeb.DashboardControllerTest do
       })
 
       XFinances.Transactions.create(%{
+        user_id: user.id,
         category_id: category_id_02,
         title: "burguer",
         movement: "outgoing",
-        value_in_cents: 6000,
-        date: Date.utc_today(),
+        value_in_cents: 6_000,
+        date: today,
         is_fixed: false,
         is_paid: false
       })
 
-      {next_month_start, _next_month_end} = XFinances.TestHelpers.next_month_bounds()
+      XFinances.Transactions.create(%{
+        user_id: user.id,
+        category_id: category_id_02,
+        title: "lunch",
+        movement: "outgoing",
+        value_in_cents: 5_000,
+        date: today,
+        is_fixed: false,
+        is_paid: false
+      })
 
       XFinances.Transactions.create(%{
+        user_id: user.id,
         category_id: category_id_02,
         title: "subscription",
         movement: "outgoing",
-        value_in_cents: 5000,
-        date: Date.utc_today(),
+        value_in_cents: 5_000,
+        date: today,
         due_date: next_month_start,
         is_fixed: false,
         is_paid: false
@@ -59,12 +84,12 @@ defmodule XFinancesWeb.DashboardControllerTest do
       assert %{
                "dashboard_data" => %{
                  "fixed_expenses" => 75_000,
-                 "monthly_expenses" => 11_000,
-                 "next_month_expeses" => 5000,
+                 "monthly_expenses" => 16_000,
+                 "next_month_expenses" => 5000,
                  "charts" => %{
                    "spents_by_category" => [
                      %{"category" => "Fixed expenses", "spent" => 75_000},
-                     %{"category" => "Food", "spent" => 11_000}
+                     %{"category" => "Food", "spent" => 16_000}
                    ]
                  }
                }

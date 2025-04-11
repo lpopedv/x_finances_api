@@ -11,7 +11,7 @@ defmodule XFinances.Schemas.Transaction do
   import Ecto.Changeset
 
   alias XFinances.Schemas.Category
-  alias XFinances.Users.User
+  alias XFinances.Schemas.User
 
   @movement_types [:incoming, :outgoing]
 
