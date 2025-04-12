@@ -1,0 +1,170 @@
+name: Elixir CI
+
+on:
+  pull_request:
+    branches: [main]
+
+env:
+  MIX_ENV: test
+
+jobs:
+  build:
+    name: Build and cache
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1.18.3
+          otp-version: 27.3
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - name: Restore build cache
+        id: build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+      - name: Install dependencies
+        run: mix deps.get
+      - name: Compile dependencies
+        run: mix deps.compile
+      - name: Compile application
+        run: mix compile
+      - name: Save dependencies cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: deps
+          key: ${{ steps.deps-cache.outputs.cache-primary-key }}
+      - name: Save build cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: _build
+          key: ${{ steps.build-cache.outputs.cache-primary-key }}
+
+  lint:
+    name: Run linter
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1.18.3
+          otp-version: 27.3
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - name: Restore build cache
+        id: build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+      - name: Run Credo
+        run: mix credo --strict
+
+  dialyzer:
+    name: Run dialyzer
+    needs: build
+    runs-on: ubuntu-latest
+    env:
+      MIX_ENV: dev
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1.18.3
+          otp-version: 27.3
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - name: Restore plt cache
+        id: plt-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: _build
+          key: ${{ runner.os }}-dialyzer-plt-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-dialyzer-plt-
+      - name: Build PLT
+        run: mix dialyzer --plt
+      - name: Run Dialyzer
+        run: mix dialyzer
+      - name: Save plt cache
+        uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: _build
+          key: ${{ steps.plt-cache.outputs.cache-primary-key }}
+
+  test:
+    name: Run tests
+    needs: build
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: amiggo_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          elixir-version: 1.18.3
+          otp-version: 27.3
+      - name: Restore dependencies cache
+        id: deps-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-
+      - name: Restore build cache
+        id: build-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: _build
+          key: ${{ runner.os }}-build-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+      - name: Run migrations
+        run: mix do ecto.create, ecto.migrate
+      - name: Run tests
+        run: mix test
