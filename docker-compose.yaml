@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: finances_postgres
+    env_file: config/localhost.env
+    ports:
+      - "5432:5432"
+    volumes:
+      - finances_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USERNAME"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  finances_pg_data:
