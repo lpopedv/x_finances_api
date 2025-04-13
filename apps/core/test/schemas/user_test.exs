@@ -65,5 +65,12 @@ defmodule Core.Schemas.UserTest do
       assert user.password_hash != nil
       assert Argon2.verify_pass(password, user.password_hash)
     end
+
+    test "successfully persists valid changeset to database", %{required_params: params} do
+      assert %User{} =
+               params
+               |> User.changeset()
+               |> Repo.insert!()
+    end
   end
 end
