@@ -1,6 +1,5 @@
 defmodule Core.Schemas.CategoryTest do
   alias Core.Schemas.Category
-  alias Core.Schemas.User
 
   use Core.DataCase, async: true
 
@@ -8,12 +7,7 @@ defmodule Core.Schemas.CategoryTest do
 
   describe "changeset/2" do
     setup do
-      user_params = build(:user)
-
-      user =
-        %User{}
-        |> User.changeset(user_params)
-        |> Core.Repo.insert!()
+      user = insert(:user)
 
       required_params = %{
         user_id: user.id,

@@ -43,10 +43,9 @@ defmodule Core.Schemas.UserTest do
     end
 
     test "returns invalid changeset when email not unique", %{required_params: params} do
-      user_params = build(:user)
-      _user = %User{} |> User.changeset(user_params) |> Core.Repo.insert!()
+      user = insert(:user)
 
-      duplicate_changeset = User.changeset(%User{}, %{params | email: user_params.email})
+      duplicate_changeset = User.changeset(%User{}, %{params | email: user.email})
 
       {:error, changeset} = Core.Repo.insert(duplicate_changeset)
 
