@@ -1,9 +1,9 @@
 defmodule Core.Schemas.CategoryTest do
-  alias Core.Schemas.Category
-
   use Core.DataCase, async: true
 
   import Core.Factory
+
+  alias Core.Schemas.Category
 
   describe "changeset/2" do
     setup do

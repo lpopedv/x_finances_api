@@ -1,9 +1,9 @@
 defmodule Core.Schemas.TransactionTest do
-  alias Core.Schemas.Transaction
-
   use Core.DataCase, async: true
 
   import Core.Factory
+
+  alias Core.Schemas.Transaction
 
   describe "changeset/2" do
     setup do
@@ -40,17 +40,23 @@ defmodule Core.Schemas.TransactionTest do
     test "returns invalid changeset (title length)", %{required_params: params} do
       invalid_title_min_length_params = %{params | title: "ab"}
 
-      changeset = Transaction.changeset(invalid_title_min_length_params)
+      changeset_min_length = Transaction.changeset(invalid_title_min_length_params)
 
-      refute changeset.valid?
+      refute changeset_min_length.valid?
 
-      assert "should be at least 3 character(s)" in errors_on(changeset)[unquote(:title)]
+      assert "should be at least 3 character(s)" in errors_on(changeset_min_length)[
+               unquote(:title)
+             ]
 
       invalid_title_max_length_params = %{params | title: String.duplicate("a", 101)}
 
-      changeset = Transaction.changeset(invalid_title_max_length_params)
+      changeset_max_length = Transaction.changeset(invalid_title_max_length_params)
 
-      assert "should be at most 100 character(s)" in errors_on(changeset)[unquote(:title)]
+      refute changeset_max_length.valid?
+
+      assert "should be at most 100 character(s)" in errors_on(changeset_max_length)[
+               unquote(:title)
+             ]
     end
 
     test "returns invalid changeset (value_in_cents greater than 0)", %{required_params: params} do

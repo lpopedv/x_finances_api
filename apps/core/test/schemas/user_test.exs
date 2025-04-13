@@ -1,9 +1,9 @@
 defmodule Core.Schemas.UserTest do
   use Core.DataCase, async: true
 
-  alias Core.Schemas.User
-
   import Core.Factory
+
+  alias Core.Schemas.User
 
   describe "changeset/2" do
     setup do
