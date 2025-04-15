@@ -16,7 +16,7 @@ defmodule Core.Factory do
   def category_factory do
     %Core.Schemas.Category{
       user: build(:user),
-      title: sequence(:title, &"Category #{&1}"),
+      title: "Category",
       description: "Category for transactions"
     }
   end
