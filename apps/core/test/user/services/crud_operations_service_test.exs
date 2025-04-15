@@ -55,9 +55,9 @@ defmodule Core.User.Services.CrudOperationsServiceTest do
     test "should be able to delete user" do
       user = insert(:user)
 
-      {:ok, deleted_user} = CrudOperationsService.delete(user.id)
+      {:ok, _} = CrudOperationsService.delete(user.id)
 
-      assert Repo.get(User, deleted_user.id) == nil
+      assert Repo.get(User, user.id) == nil
     end
 
     test "should not be able to delete user if they do not exist" do

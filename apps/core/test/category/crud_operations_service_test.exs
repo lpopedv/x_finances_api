@@ -56,9 +56,9 @@ defmodule Core.Category.Services.CrudOperationsServiceTest do
     test "should be able to delete category" do
       category = insert(:category)
 
-      {:ok, deleted_category} = CrudOperationsService.delete(category.id)
+      {:ok, _} = CrudOperationsService.delete(category.id)
 
-      assert Repo.get(Category, deleted_category.id) == nil
+      assert Repo.get(Category, category.id) == nil
     end
 
     test "should not be able to delete category if it does not exist" do
