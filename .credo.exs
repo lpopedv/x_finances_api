@@ -23,11 +23,14 @@
         #
         included: [
           "lib/",
-          "test/"
+          "test/",
+          "apps/*/lib/",
+          "apps/*/test/"
         ],
         excluded: [
           ~r"/_build/",
-          ~r"/deps/"
+          ~r"/deps/",
+          "apps/core/test/support/factory.ex"
         ]
       },
       #
@@ -168,7 +171,8 @@
           {Credo.Check.Readability.NestedFunctionCalls, []},
           {Credo.Check.Readability.SinglePipe, []},
           {Credo.Check.Readability.OnePipePerLine, []},
-          {Credo.Check.Readability.Specs, [include_defp: false]},
+          {Credo.Check.Readability.Specs,
+           [include_defp: false, files: %{excluded: ["apps/web/lib/web/controllers/*"]}]},
           {Credo.Check.Readability.StrictModuleLayout, []},
           {Credo.Check.Readability.WithCustomTaggedTuple, []},
           {Credo.Check.Refactor.DoubleBooleanNegation, []},

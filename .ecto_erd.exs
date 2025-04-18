@@ -1,10 +1,7 @@
 [
-  otp_app: :x_finances,
+  otp_app: :core,
   map_node: fn %{schema_module: schema_module} = node ->
-    module_str = Atom.to_string(schema_module)
-
-    if String.contains?(module_str, "XFinances.Categories") or
-         String.contains?(module_str, "XFinances.Transactions") do
+    if String.contains?(Atom.to_string(schema_module), "Core.Schemas") do
       node
     else
       nil
