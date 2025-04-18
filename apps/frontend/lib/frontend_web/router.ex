@@ -17,7 +17,8 @@ defmodule FrontendWeb.Router do
   scope "/", FrontendWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", HomeLive
+    live "/categories", CategoriesLive
   end
 
   # Other scopes may use custom stacks.
