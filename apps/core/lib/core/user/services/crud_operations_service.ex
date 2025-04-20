@@ -33,7 +33,7 @@ defmodule Core.User.Services.CrudOperationsService do
     end
   end
 
-  def show(user_id) do
+  def get_by_id(user_id) do
     case Repo.get(User, user_id) do
       nil -> {:error, :not_found}
       user -> {:ok, user}

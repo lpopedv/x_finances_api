@@ -65,11 +65,11 @@ defmodule Core.User.Services.CrudOperationsServiceTest do
     end
   end
 
-  describe "show/1" do
+  describe "get_by_id/1" do
     test "should be able to get a user" do
       new_user = insert(:user)
 
-      {:ok, user} = CrudOperationsService.show(new_user.id)
+      {:ok, user} = CrudOperationsService.get_by_id(new_user.id)
 
       assert %{
                full_name: "User Name",
@@ -79,8 +79,8 @@ defmodule Core.User.Services.CrudOperationsServiceTest do
              } = user
     end
 
-    test "should not be able to show user if they do not exist" do
-      assert {:error, :not_found} = CrudOperationsService.show(Ecto.UUID.generate())
+    test "should not be able to get user if they do not exist" do
+      assert {:error, :not_found} = CrudOperationsService.get_by_id(Ecto.UUID.generate())
     end
   end
 
@@ -98,8 +98,8 @@ defmodule Core.User.Services.CrudOperationsServiceTest do
              } = user
     end
 
-    test "should not be able to show user if they do not exist" do
-      assert {:error, :not_found} = CrudOperationsService.show(Ecto.UUID.generate())
+    test "should not be able to get user if they do not exist" do
+      assert {:error, :not_found} = CrudOperationsService.get_by_id(Ecto.UUID.generate())
     end
   end
 end
