@@ -26,3 +26,4 @@ erl_crash.dump
 core-*.tar
 
 .elixir-tools
+.aider*
