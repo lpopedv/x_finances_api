@@ -7,6 +7,7 @@ defmodule Finances.Accounts do
   alias Finances.Repo
 
   alias Finances.Accounts.{User, UserToken, UserNotifier}
+  alias Finances.Schemas.User
 
   ## Database getters
 

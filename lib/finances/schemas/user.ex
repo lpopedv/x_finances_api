@@ -1,8 +1,34 @@
-defmodule Finances.Accounts.User do
-  use Ecto.Schema
-  import Ecto.Changeset
-  @primary_key {:id, :binary_id, autogenerate: true}
-  @foreign_key_type :binary_id
+defmodule Finances.Schemas.User do
+  use Finances.Schema
+
+
+  @typedoc """
+  Represents a User entity in the system.
+
+  ## Fields
+
+  - `id`: UUID primary key
+  - `email`: Unique email address
+  - `full_name`: User's full name
+  - `password`: Virtual field for plain text password (not persisted)
+  - `hashed_password`: Hashed password stored in database
+  - `current_password`: Virtual field for current password validation
+  - `confirmed_at`: DateTime when email was confirmed
+  - `inserted_at`: Creation timestamp
+  - `updated_at`: Last update timestamp
+  """
+
+  @type t :: %__MODULE__{
+          id: String.t() | nil,
+          email: String.t() | nil,
+          full_name: String.t() | nil,
+          password: String.t() | nil,
+          hashed_password: String.t() | nil,
+          current_password: String.t() | nil,
+          confirmed_at: DateTime.t() | nil,
+          inserted_at: DateTime.t() | nil,
+          updated_at: DateTime.t() | nil
+        }
   schema "users" do
     field(:email, :string)
     field(:full_name, :string)
@@ -13,6 +39,7 @@ defmodule Finances.Accounts.User do
 
     timestamps(type: :utc_datetime)
   end
+
 
   @doc """
   A user changeset for registration.
@@ -143,7 +170,7 @@ defmodule Finances.Accounts.User do
   If there is no user or the user doesn't have a password, we call
   `Argon2.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%Finances.Accounts.User{hashed_password: hashed_password}, password)
+  def valid_password?(%Finances.Schemas.User{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Argon2.verify_pass(password, hashed_password)
   end

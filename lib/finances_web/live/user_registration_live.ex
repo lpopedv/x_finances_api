@@ -2,7 +2,7 @@ defmodule FinancesWeb.UserRegistrationLive do
   use FinancesWeb, :live_view
 
   alias Finances.Accounts
-  alias Finances.Accounts.User
+  alias Finances.Schemas.User
 
   def render(assigns) do
     ~H"""
