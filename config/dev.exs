@@ -1,11 +1,11 @@
 import Config
 
 # Configure your database
-config :x_finances, XFinances.Repo,
+config :finances, Finances.Repo,
   username: "postgres",
   password: "postgres",
   hostname: "localhost",
-  database: "x_finances",
+  database: "finances",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
@@ -17,14 +17,17 @@ config :x_finances, XFinances.Repo,
 # watchers to your application. For example, we can use it
 # to bundle .js and .css sources.
 # Binding to loopback ipv4 address prevents access from other machines.
-config :x_finances, XFinancesWeb.Endpoint,
+config :finances, FinancesWeb.Endpoint,
   # Change to `ip: {0, 0, 0, 0}` to allow access from other machines.
   http: [ip: {127, 0, 0, 1}, port: 4000],
   check_origin: false,
   code_reloader: true,
   debug_errors: true,
-  secret_key_base: "2L+RZ1Ub1gW5mpQCXOlcVm5Rju6wjvXs/35DM29JIS6r+by3Wg73/dzRhpovXln4",
-  watchers: []
+  secret_key_base: "NxvHtT33gvQ+q/v5JX/k95UpgPazmp04kU9MgPsV+nzv/+iLtPZ4+3AXQBxlQI87",
+  watchers: [
+    esbuild: {Esbuild, :install_and_run, [:finances, ~w(--sourcemap=inline --watch)]},
+    tailwind: {Tailwind, :install_and_run, [:finances, ~w(--watch)]}
+  ]
 
 # ## SSL Support
 #
@@ -49,8 +52,17 @@ config :x_finances, XFinancesWeb.Endpoint,
 # configured to run both http and https servers on
 # different ports.
 
+# Watch static and templates for browser reloading.
+config :finances, FinancesWeb.Endpoint,
+  live_reload: [
+    patterns: [
+      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"lib/finances_web/(controllers|live|components)/.*(ex|heex)$"
+    ]
+  ]
+
 # Enable dev routes for dashboard and mailbox
-config :x_finances, dev_routes: true
+config :finances, dev_routes: true
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :console, format: "[$level] $message\n"
@@ -61,3 +73,12 @@ config :phoenix, :stacktrace_depth, 20
 
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix_live_view,
+  # Include HEEx debug annotations as HTML comments in rendered markup
+  debug_heex_annotations: true,
+  # Enable helpful, but potentially expensive runtime checks
+  enable_expensive_runtime_checks: true
+
+# Disable swoosh api client as it is only required for production adapters.
+config :swoosh, :api_client, false

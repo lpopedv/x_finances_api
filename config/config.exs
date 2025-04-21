@@ -7,20 +7,51 @@
 # General application configuration
 import Config
 
-config :x_finances,
-  ecto_repos: [XFinances.Repo],
-  generators: [timestamp_type: :utc_datetime]
+config :finances,
+  ecto_repos: [Finances.Repo],
+  generators: [timestamp_type: :utc_datetime, binary_id: true]
 
 # Configures the endpoint
-config :x_finances, XFinancesWeb.Endpoint,
+config :finances, FinancesWeb.Endpoint,
   url: [host: "localhost"],
   adapter: Bandit.PhoenixAdapter,
   render_errors: [
-    formats: [json: XFinancesWeb.ErrorJSON],
+    formats: [html: FinancesWeb.ErrorHTML, json: FinancesWeb.ErrorJSON],
     layout: false
   ],
-  pubsub_server: XFinances.PubSub,
-  live_view: [signing_salt: "rViEetHg"]
+  pubsub_server: Finances.PubSub,
+  live_view: [signing_salt: "5DlWjEml"]
+
+# Configures the mailer
+#
+# By default it uses the "Local" adapter which stores the emails
+# locally. You can see the emails in your browser, at "/dev/mailbox".
+#
+# For production it's recommended to configure a different adapter
+# at the `config/runtime.exs`.
+config :finances, Finances.Mailer, adapter: Swoosh.Adapters.Local
+
+# Configure esbuild (the version is required)
+config :esbuild,
+  version: "0.17.11",
+  finances: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+# Configure tailwind (the version is required)
+config :tailwind,
+  version: "3.4.3",
+  finances: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=css/app.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
 
 # Configures Elixir's Logger
 config :logger, :console,

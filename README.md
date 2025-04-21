@@ -1,65 +1,18 @@
-# XFinances API 🚀
+# Finances
 
-**⚠️ Note: This project is currently under active development.**
+To start your Phoenix server:
 
-XFinances is an open-source financial control system built with Elixir. This repository contains the API component of the system, which provides endpoints for managing your finances. 💰
+  * Run `mix setup` to install and setup dependencies
+  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
 
----
+Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-## Overview
+Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
 
-The API offers endpoints for:
+## Learn more
 
-- **Users**: Perform CRUD operations for user management. 👤
-- **Categories**: Manage your financial categories. 🗂️
-- **Transactions**: Record and track your financial transactions. 💸
-
----
-
-## Future Enhancements
-
-- Comprehensive financial reports 📊  
-- Integration with cryptocurrency monitoring systems 🔗  
-- Automated trading bot for executing trading strategies 🤖  
-- Payment reminders and notifications ⏰  
-
----
-
-## Installation
-
-1. **Clone the repository:**
-
-   ```bash
-   git clone https://github.com/lpopedv/x_finances_api.git
-   cd x_finances_api
-   ```
-
-2. **Install dependencies:**
-
-```bash
-mix deps.get
-```
-
-3. **Start the PostgreSQL Docker container:**
-
-```bash
-docker compose up -d
-```
-
-4. **Set up the database:**
-
-```bash
-mix ecto.setup
-```
-
-5. Run tests:
-
-```bash
-mix test
-```
-
-6. Start the API server:
-
-```bash
-mix phx.server
-```
+  * Official website: https://www.phoenixframework.org/
+  * Guides: https://hexdocs.pm/phoenix/overview.html
+  * Docs: https://hexdocs.pm/phoenix
+  * Forum: https://elixirforum.com/c/phoenix-forum
+  * Source: https://github.com/phoenixframework/phoenix

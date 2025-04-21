@@ -5,9 +5,7 @@
 # Inside the script, you can read and write to any of your
 # repositories directly:
 #
-#     XFinances.Repo.insert!(%XFinances.SomeSchema{})
+#     Finances.Repo.insert!(%Finances.SomeSchema{})
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
-
-XFinances.Seeds.run()

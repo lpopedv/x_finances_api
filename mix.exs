@@ -1,9 +1,9 @@
-defmodule XFinances.MixProject do
+defmodule Finances.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :x_finances,
+      app: :finances,
       version: "0.1.0",
       elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
@@ -18,7 +18,7 @@ defmodule XFinances.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {XFinances.Application, []},
+      mod: {Finances.Application, []},
       extra_applications: [:logger, :runtime_tools]
     ]
   end
@@ -32,21 +32,32 @@ defmodule XFinances.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:argon2_elixir, "~> 3.0"},
       {:phoenix, "~> 1.7.20"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
+      {:phoenix_html, "~> 4.1"},
+      {:phoenix_live_reload, "~> 1.2", only: :dev},
+      {:phoenix_live_view, "~> 1.0.0"},
+      {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
+      {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:heroicons,
+       github: "tailwindlabs/heroicons",
+       tag: "v2.1.1",
+       sparse: "optimized",
+       app: false,
+       compile: false,
+       depth: 1},
+      {:swoosh, "~> 1.5"},
+      {:finch, "~> 0.13"},
       {:telemetry_metrics, "~> 1.0"},
       {:telemetry_poller, "~> 1.0"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
-      {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.4", only: [:dev, :test], runtime: false},
-      {:ecto_erd, "~> 0.6", only: :dev, runtime: false},
-      {:cors_plug, "~> 3.0"},
-      {:argon2_elixir, "~> 4.0"},
       {:ex_machina, "~> 2.8", only: :test}
     ]
   end
@@ -59,26 +70,17 @@ defmodule XFinances.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "ecto.migrate": ["ecto.migrate", &maybe_ecto_dump/1, &maybe_schema_dump/1],
-      "ecto.rollback": ["ecto.rollback", &maybe_ecto_dump/1, &maybe_schema_dump/1]
+      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.build": ["tailwind finances", "esbuild finances"],
+      "assets.deploy": [
+        "tailwind finances --minify",
+        "esbuild finances --minify",
+        "phx.digest"
+      ]
     ]
-  end
-
-  defp maybe_ecto_dump(_) do
-    if Mix.env() == :dev do
-      Mix.Task.run("ecto.dump")
-    end
-  end
-
-  defp maybe_schema_dump(_) do
-    if Mix.env() == :dev do
-      Mix.Task.run("ecto.gen.erd", ["--output-path=erd.puml"])
-      File.cp!("erd.puml", "priv/repo/erd.plantuml")
-      File.rm!("erd.puml")
-    end
   end
 end
